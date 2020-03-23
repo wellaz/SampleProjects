@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +18,9 @@ import com.zcs.sdk.SdkResult;
 import com.zcs.sdk.Sys;
 import com.zcs.sdk.card.CardReaderTypeEnum;
 
+import java.io.Console;
 import java.io.File;
+import java.io.PrintWriter;
 import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,17 +52,18 @@ public class MainActivity extends AppCompatActivity {
 
         cardFragment = new CardFragment(this);
         //cardFragment.readAllCardTypes();
-        TextView textView = (TextView)findViewById(R.id.topic);
-        ((Button)findViewById(R.id.btnswipe)).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-
-               cardFragment.searchBankCard(CardReaderTypeEnum.MAG_CARD);
-           }
-       });
-        ((Button)findViewById(R.id.btninsert)).setOnClickListener(new View.OnClickListener() {
+        final TextView textView = (TextView) findViewById(R.id.topic);
+        ((Button) findViewById(R.id.btnswipe)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                textView.setText("Please swipe card...");
+                cardFragment.searchBankCard(CardReaderTypeEnum.MAG_CARD);
+            }
+        });
+        ((Button) findViewById(R.id.btninsert)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textView.setText("Please insert card...");
                 cardFragment.searchBankCard(CardReaderTypeEnum.IC_CARD);
             }
         });
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         // stopService(mServiceIntent);
         Log.i("MAINACT", "onDestroy!");
         super.onDestroy();
-       System.exit(0);
+        System.exit(0);
     }
 
     public void saveData(String value) {
@@ -114,5 +118,28 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(TEXT, value);
         editor.apply();
+        writeToFile(value);
     }
+
+    public void writeToFile(String value) {
+        try {
+            File path = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS);
+            File myFile = new File(path, "mytextfile.txt");
+            if (myFile.exists()) {
+                PrintWriter writer = new PrintWriter(myFile);
+                writer.print("");
+                writer.close();
+            }
+            FileOutputStream fOut = new FileOutputStream(myFile, true);
+            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(value);
+            myOutWriter.close();
+            fOut.close();
+        } catch (java.io.IOException e) {
+            //do something if an IOException occurs.
+        }
+    }
+
+
 }

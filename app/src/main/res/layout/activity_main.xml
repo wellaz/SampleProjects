@@ -25,7 +25,7 @@
         android:layout_height="79dp"
         android:layout_marginEnd="52dp"
         android:layout_marginTop="132dp"
-        android:backgroundTint="@android:color/holo_orange_light"
+        android:backgroundTint="@android:color/darker_gray"
         android:text="Swipe"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
         android:layout_height="80dp"
         android:layout_marginEnd="52dp"
         android:layout_marginTop="284dp"
-        android:backgroundTint="@android:color/holo_orange_light"
+        android:backgroundTint="@android:color/darker_gray"
         android:backgroundTintMode="src_over"
         android:text="Insert"
         app:layout_constraintEnd_toEndOf="parent"
