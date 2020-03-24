@@ -10,6 +10,8 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,17 +55,25 @@ public class MainActivity extends AppCompatActivity {
         cardFragment = new CardFragment(this);
         //cardFragment.readAllCardTypes();
         final TextView textView = (TextView) findViewById(R.id.topic);
+        final Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(50); //You can manage the blinking time with this parameter
+        anim.setStartOffset(20);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+
         ((Button) findViewById(R.id.btnswipe)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textView.setText("Please swipe card...");
+                textView.setText("Swipe card...");
+                textView.startAnimation(anim);
                 cardFragment.searchBankCard(CardReaderTypeEnum.MAG_CARD);
             }
         });
         ((Button) findViewById(R.id.btninsert)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                textView.setText("Please insert card...");
+                textView.setText("Insert card...");
+                textView.startAnimation(anim);
                 cardFragment.searchBankCard(CardReaderTypeEnum.IC_CARD);
             }
         });
