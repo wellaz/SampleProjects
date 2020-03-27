@@ -1,5 +1,6 @@
 package com.example.wellington.samplepos;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -11,6 +12,7 @@ import android.view.View;
 import com.zcs.sdk.DriverManager;
 import com.zcs.sdk.Printer;
 import com.zcs.sdk.SdkResult;
+import com.zcs.sdk.Sys;
 import com.zcs.sdk.print.PrnStrFormat;
 import com.zcs.sdk.print.PrnTextFont;
 import com.zcs.sdk.print.PrnTextStyle;
@@ -27,27 +29,24 @@ public class PrintFragment  {
     public static final String QR_TEXT = "https://www.baidu.com";
     public static final String BAR_TEXT = "6922711079066";
 
-
-
-
-    public void initialize(View view, @Nullable Bundle savedInstanceState) {
-
+    public void initialize() {
         mDriverManager = new MyManager().sysDriverManager;//MyApp.sDriverManager;
         mPrinter = mDriverManager.getPrinter();
+        String s =getSn();
+        Log.i("serial",s);
 
-
-                printPaperOut();
-
-
-
-                printMatrixText(1);
+              //  printPaperOut();
 
 
 
-                printPic("print_demo.bmp");
+              //  printMatrixText(1);
 
 
-                printQr();
+
+              //  printPic("print_demo.bmp");
+
+
+            //    printQr();
 
 
 
@@ -204,7 +203,27 @@ public class PrintFragment  {
             }
         }).start();
     }
-
+    public int printPic(Bitmap bitmap) {
+        int printStatus = mPrinter.getPrinterStatus();
+        if (printStatus == SdkResult.SDK_PRN_STATUS_PAPEROUT) {
+            //Paper out
+        } else {
+            try {
+                PrnStrFormat format = new PrnStrFormat();
+                 mPrinter.setPrintAppendBitmap(bitmap, Layout.Alignment.ALIGN_CENTER);
+                mPrinter.setPrintAppendString(" ", format);
+                mPrinter.setPrintAppendString(" ", format);
+                mPrinter.setPrintAppendString(" ", format);
+                printStatus = mPrinter.setPrintStart();
+                if (printStatus == SdkResult.SDK_PRN_STATUS_PAPEROUT) {
+                    //Paper out
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return printStatus;
+    }
 
 
     private int printPic(String path) {
@@ -264,11 +283,38 @@ public class PrintFragment  {
         }).start();
     }
 
+    private String getSn() {
+        // Config the SDK base info
+        Sys sys = new MyManager().sysDriverManager.getBaseSysDevice();
+        String[] pid = new String[1];
+        int status = sys.getPid(pid);
+        int count = 0;
+        while (status != SdkResult.SDK_OK && count < 3) {
+            count++;
+            int sysPowerOn = sys.sysPowerOn();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            final int i = sys.sdkInit();
+        }
+        int statue = sys.getFirmwareVer(new String[1]);
+        if (statue != SdkResult.SDK_OK) {
+            int sysPowerOn = sys.sysPowerOn();
+            Log.i(TAG, "sysPowerOn: " + sysPowerOn);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        int i = sys.sdkInit();
+        if (i == SdkResult.SDK_OK) {
+        }
 
 
 
-    public void Destroy() {
-
-        isLoop = false;
+        return pid[0];
     }
 }
