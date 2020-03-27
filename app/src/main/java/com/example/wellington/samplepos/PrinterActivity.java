@@ -42,6 +42,7 @@ public class PrinterActivity extends AppCompatActivity {
         webView =(WebView)findViewById(R.id.txt_webview);
         webView.setDrawingCacheEnabled(true);
         webView.loadData(readFile(), "text/html; charset=utf-8", "UTF-8");
+        finish();
     }
 
     @Override
@@ -51,6 +52,7 @@ public class PrinterActivity extends AppCompatActivity {
         PrintFragment printFragment =new PrintFragment();
         printFragment.initialize();
         printFragment.printPic(b);
+        System.exit(0);
     }
 
 
