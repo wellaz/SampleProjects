@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Dialog">
-        <activity android:name=".PrinterActivity">
+        <activity android:name=".MainActivity">
            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,6 +20,13 @@
           </intent-filter>
         </activity>
 
+        <activity android:name=".PrinterActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.QUICK_VIEW" />
+
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+        </activity>
 
       <!--  <service
             android:name="com.example.wellington.samplepos.service"

@@ -24,12 +24,17 @@ import com.zcs.sdk.print.PrnTextStyle;
 public class PrintFragment  {
     private static final String TAG = "PrintFragment";
     private DriverManager mDriverManager = new MyManager().sysDriverManager;//MyApp.sDriverManager;
-    private Printer mPrinter;
+    public Printer mPrinter;
 
     public static final String QR_TEXT = "https://www.baidu.com";
     public static final String BAR_TEXT = "6922711079066";
+    PrinterActivity activity;
+    public  PrintFragment(PrinterActivity a){
+        this.activity=a;
+        initialize();
+    }
 
-    public void initialize() {
+    private void initialize() {
         mDriverManager = new MyManager().sysDriverManager;//MyApp.sDriverManager;
         mPrinter = mDriverManager.getPrinter();
         String s =getSn();
@@ -47,16 +52,6 @@ public class PrintFragment  {
 
 
             //    printQr();
-
-
-
-
-
-
-
-
-
-
     }
 
 
@@ -196,6 +191,8 @@ public class PrintFragment  {
                     mPrinter.setPrintAppendString(" ", format);
                     mPrinter.setPrintAppendString(" ", format);
                     printStatus = mPrinter.setPrintStart();
+                  //  finish();
+                   // System.exit(0);
                     if (printStatus == SdkResult.SDK_PRN_STATUS_PAPEROUT) {
                         //Paper out
                     }
@@ -222,6 +219,7 @@ public class PrintFragment  {
                 e.printStackTrace();
             }
         }
+       // activity.finish();
         return printStatus;
     }
 
